@@ -1,0 +1,122 @@
+import SwiftUI
+
+struct ReviewView: View {
+    @EnvironmentObject var session: ReviewSession
+
+    private var bank: [Question] {
+        QuestionLoader.load()
+    }
+
+    var body: some View {
+        Group {
+            if !session.sessionActive {
+                startView
+            } else if let q = session.currentQuestion {
+                questionView(q)
+            }
+        }
+        .padding(16)
+        .frame(width: 420)
+    }
+
+    // MARK: - 开始页
+
+    private var startView: some View {
+        VStack(spacing: 14) {
+            Text("📚 面试复习")
+                .font(.title2.bold())
+
+            Text("题库 \(bank.count) 题 · 每轮 5 题 · 答题后揭晓答案")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Button("开始复习") {
+                session.startSession(bank: bank, count: 5)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - 答题页
+
+    private func questionView(_ q: Question) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // 头部：进度 + 分类标签
+            HStack {
+                Text(session.progress)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(q.category)
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(Color.accentColor.opacity(0.12))
+                    .clipShape(Capsule())
+            }
+
+            // 题目
+            Text(q.question)
+                .font(.system(size: 14, weight: .medium))
+                .fixedSize(horizontal: false, vertical: true)
+
+            Divider()
+
+            if session.showAnswer {
+                answerView(q)
+            } else {
+                actionButtons
+            }
+        }
+    }
+
+    // MARK: - 答案区
+
+    private func answerView(_ q: Question) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("📖 标准答案")
+                .font(.caption.bold())
+                .foregroundStyle(.secondary)
+
+            ScrollView {
+                Text(q.answer)
+                    .font(.system(size: 12))
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxHeight: 320)
+
+            Button("下一题") {
+                session.advance()
+            }
+            .buttonStyle(.borderedProminent)
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    // MARK: - 操作按钮
+
+    private var actionButtons: some View {
+        HStack(spacing: 12) {
+            Button {
+                session.markClear()
+            } label: {
+                Label("清楚", systemImage: "checkmark.circle.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.green)
+
+            Button {
+                session.markUnclear()
+            } label: {
+                Label("不清楚", systemImage: "xmark.circle.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.red)
+        }
+    }
+}
