@@ -3,20 +3,65 @@ import SwiftUI
 struct ReviewView: View {
     @EnvironmentObject var session: ReviewSession
 
+    enum Tab {
+        case review      // 复习
+        case wrongBook   // 错题本
+        case stats       // 统计
+    }
+
+    @State private var tab: Tab = .review
+
     private var bank: [Question] {
         QuestionLoader.load()
     }
 
     var body: some View {
-        Group {
-            if !session.sessionActive {
-                startView
-            } else if let q = session.currentQuestion {
-                questionView(q)
+        VStack(spacing: 0) {
+            tabBar
+            Divider()
+
+            Group {
+                switch tab {
+                case .review:
+                    if !session.sessionActive {
+                        startView
+                    } else if let q = session.currentQuestion {
+                        questionView(q)
+                    }
+                case .wrongBook:
+                    WrongBookView(entries: session.loadWrongBook(bank: bank))
+                case .stats:
+                    StatsView(stats: session.loadStats(bank: bank),
+                              wrongEntries: session.loadWrongBook(bank: bank))
+                }
             }
+            .padding(16)
+            .frame(width: 520)
         }
-        .padding(16)
-        .frame(width: 520)
+    }
+
+    // MARK: - Tab 切换栏
+
+    private var tabBar: some View {
+        HStack(spacing: 20) {
+            tabButton(.review, "复习", "book.fill")
+            tabButton(.wrongBook, "错题本", "xmark.seal.fill")
+            tabButton(.stats, "统计", "chart.bar.fill")
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+    }
+
+    private func tabButton(_ target: Tab, _ title: String, _ icon: String) -> some View {
+        Button {
+            tab = target
+        } label: {
+            Label(title, systemImage: icon)
+                .font(.system(size: 12, weight: tab == target ? .semibold : .regular))
+                .foregroundStyle(tab == target ? Color.accentColor : Color.secondary)
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - 开始页（今日队列概览）

@@ -151,4 +151,56 @@ final class ReviewSession: ObservableObject {
     }
 
     private var calendar: Calendar { Calendar.current }
+
+    // MARK: 错题本 & 统计
+
+    /// 错题列表：答错过的题，按答错次数降序
+    func loadWrongBook(bank: [Question]) -> [WrongEntry] {
+        let progressMap = store.load()
+        var entries: [WrongEntry] = []
+
+        for q in bank {
+            if let p = progressMap[q.id], p.unclearCount > 0 {
+                entries.append(WrongEntry(
+                    question: q,
+                    unclearCount: p.unclearCount,
+                    clearCount: p.clearCount,
+                    lastReviewed: p.lastReviewed
+                ))
+            }
+        }
+
+        return entries.sorted { $0.unclearCount > $1.unclearCount }
+    }
+
+    /// 学习统计
+    func loadStats(bank: [Question]) -> Stats {
+        let progressMap = store.load()
+        let reviewed = progressMap.count
+        let wrong = progressMap.values.filter { $0.unclearCount > 0 }.count
+        let mastered = progressMap.values.filter { $0.consecutiveClear >= 5 }.count
+        let total = bank.count
+        return Stats(total: total,
+                     reviewed: reviewed,
+                     wrong: wrong,
+                     mastered: mastered)
+    }
+}
+
+/// 错题条目
+struct WrongEntry: Identifiable {
+    let question: Question
+    let unclearCount: Int
+    let clearCount: Int
+    let lastReviewed: Date?
+
+    var id: String { question.id }
+}
+
+/// 学习统计
+struct Stats {
+    let total: Int        // 题库总数
+    let reviewed: Int     // 已学题数
+    let wrong: Int        // 错题数
+    let mastered: Int     // 已掌握（连续答对5次+）
 }
