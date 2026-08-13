@@ -19,22 +19,32 @@ struct ReviewView: View {
         .frame(width: 420)
     }
 
-    // MARK: - 开始页
+    // MARK: - 开始页（今日队列概览）
 
     private var startView: some View {
         VStack(spacing: 14) {
             Text("📚 面试复习")
                 .font(.title2.bold())
 
-            Text("题库 \(bank.count) 题 · 每轮 5 题 · 答题后揭晓答案")
+            Text("题库 \(bank.count) 题 · 间隔重复 · 答题后揭晓答案")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Button("开始复习") {
-                session.startSession(bank: bank, count: 5)
+            Button("加载今日队列") {
+                session.loadTodayQueue(bank: bank)
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
+
+            // 今日队列说明
+            if session.newCount + session.dueCount > 0 {
+                HStack(spacing: 12) {
+                    Label("新题 \(session.newCount)", systemImage: "sparkles")
+                    Label("复习 \(session.dueCount)", systemImage: "clock.arrow.circlepath")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
         }
         .frame(maxWidth: .infinity)
     }
