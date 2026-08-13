@@ -185,6 +185,18 @@ final class ReviewSession: ObservableObject {
                      wrong: wrong,
                      mastered: mastered)
     }
+
+    /// 已学过的题目 ID 集合（有学习记录）
+    func reviewedQuestionIds() -> Set<String> {
+        Set(store.load().keys)
+    }
+
+    /// 已掌握的题目 ID 集合（连续答对 5 次以上）
+    func masteredQuestionIds() -> Set<String> {
+        Set(store.load().values
+            .filter { $0.consecutiveClear >= 5 }
+            .map(\.questionId))
+    }
 }
 
 /// 错题条目

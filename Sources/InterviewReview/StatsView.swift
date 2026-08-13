@@ -9,8 +9,11 @@ struct StatsView: View {
     var onNavigate: ((StatsDestination) -> Void)? = nil
 
     enum StatsDestination {
-        case review      // 去复习
-        case wrongBook   // 去错题本
+        case review          // 去复习 Tab
+        case wrongBook       // 去错题本 Tab
+        case allQuestions    // 全部题库列表
+        case reviewedQuestions  // 已学题目列表
+        case masteredQuestions  // 已掌握题目列表
     }
 
     var body: some View {
@@ -18,16 +21,16 @@ struct StatsView: View {
             Text("📊 学习统计")
                 .font(.title3.bold())
 
-            // 四个核心指标（可点击跳转）
+            // 四个核心指标（可点击查看题目明细）
             HStack(spacing: 10) {
                 metricCard("题库", stats.total, "books.vertical.fill", .blue,
-                           destination: .review, enabled: stats.total > 0)
+                           destination: .allQuestions, enabled: stats.total > 0)
                 metricCard("已学", stats.reviewed, "checkmark.circle.fill", .green,
-                           destination: .review, enabled: stats.reviewed > 0)
+                           destination: .reviewedQuestions, enabled: stats.reviewed > 0)
                 metricCard("错题", stats.wrong, "xmark.circle.fill", .red,
                            destination: .wrongBook, enabled: stats.wrong > 0)
                 metricCard("已掌握", stats.mastered, "star.fill", .orange,
-                           destination: nil, enabled: false)
+                           destination: .masteredQuestions, enabled: stats.mastered > 0)
             }
 
             // 总进度条
@@ -117,8 +120,7 @@ struct StatsView: View {
             .buttonStyle(.plain)
         } else {
             content
-            // "已掌握" 目前不可点击（无目标页面），降低透明度提示不可交互
-                .opacity(destination == nil && enabled == false ? 0.6 : 1.0)
+                .opacity(0.5)
         }
     }
 }

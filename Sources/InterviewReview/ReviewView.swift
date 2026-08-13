@@ -11,6 +11,21 @@ struct ReviewView: View {
 
     @State private var tab: Tab = .review
 
+    /// 统计页内打开题目列表的筛选条件（nil = 显示统计首页）
+    @State private var questionListFilter: QuestionFilter?
+
+    enum QuestionFilter {
+        case all, reviewed, mastered
+
+        var title: String {
+            switch self {
+            case .all: return "📚 全部题库"
+            case .reviewed: return "✅ 已学题目"
+            case .mastered: return "⭐ 已掌握"
+            }
+        }
+    }
+
     private var bank: [Question] {
         QuestionLoader.load()
     }
@@ -31,17 +46,51 @@ struct ReviewView: View {
                 case .wrongBook:
                     WrongBookView(entries: session.loadWrongBook(bank: bank))
                 case .stats:
-                    StatsView(stats: session.loadStats(bank: bank),
-                              wrongEntries: session.loadWrongBook(bank: bank)) { dest in
-                        switch dest {
-                        case .review: tab = .review
-                        case .wrongBook: tab = .wrongBook
-                        }
+                    if let filter = questionListFilter {
+                        QuestionListView(title: filter.title,
+                                         questions: filteredQuestions(filter),
+                                         onBack: { questionListFilter = nil })
+                    } else {
+                        statsView
                     }
                 }
             }
             .padding(16)
             .frame(width: 520)
+        }
+    }
+
+    // MARK: - 统计首页
+
+    private var statsView: some View {
+        StatsView(stats: session.loadStats(bank: bank),
+                  wrongEntries: session.loadWrongBook(bank: bank)) { dest in
+            switch dest {
+            case .review:
+                tab = .review
+            case .wrongBook:
+                tab = .wrongBook
+            case .allQuestions:
+                questionListFilter = .all
+            case .reviewedQuestions:
+                questionListFilter = .reviewed
+            case .masteredQuestions:
+                questionListFilter = .mastered
+            }
+        }
+    }
+
+    /// 按筛选条件获取题目列表
+    private func filteredQuestions(_ filter: QuestionFilter) -> [Question] {
+        switch filter {
+        case .all:
+            return bank
+        case .reviewed:
+            let ids = session.reviewedQuestionIds()
+            return bank.filter { ids.contains($0.id) }
+        case .mastered:
+            let ids = session.masteredQuestionIds()
+            return bank.filter { ids.contains($0.id) }
         }
     }
 
