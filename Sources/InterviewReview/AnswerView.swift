@@ -189,7 +189,7 @@ struct RichTextLine: View {
                     let codeText = String(remaining[remaining.index(after: remaining.startIndex)..<end.lowerBound])
                     var attr = AttributedString(codeText)
                     attr.font = .system(size: 11, design: .monospaced)
-                    attr.backgroundColor = Color.gray.opacity(0.2)
+                    // 注意：不使用 backgroundColor —— AttributedString 背景在换行时会重叠
                     result += attr
                     remaining = String(remaining[end.upperBound...])
                     continue

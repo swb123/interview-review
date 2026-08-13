@@ -32,7 +32,12 @@ struct ReviewView: View {
                     WrongBookView(entries: session.loadWrongBook(bank: bank))
                 case .stats:
                     StatsView(stats: session.loadStats(bank: bank),
-                              wrongEntries: session.loadWrongBook(bank: bank))
+                              wrongEntries: session.loadWrongBook(bank: bank)) { dest in
+                        switch dest {
+                        case .review: tab = .review
+                        case .wrongBook: tab = .wrongBook
+                        }
+                    }
                 }
             }
             .padding(16)

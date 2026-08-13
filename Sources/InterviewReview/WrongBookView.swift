@@ -67,10 +67,10 @@ struct WrongBookView: View {
 
                     Text(entry.question.question)
                         .font(.system(size: 12, weight: .medium))
-                        .lineLimit(2)
                         .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
 
-                    Spacer()
+                    Spacer(minLength: 8)
 
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .font(.caption2)
