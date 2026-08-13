@@ -91,7 +91,7 @@ struct ReviewView: View {
                 .foregroundStyle(.secondary)
 
             ScrollView {
-                AnswerWebView(markdown: q.answer)
+                AnswerView(markdown: q.answer)
             }
             .frame(maxHeight: 380)
 
