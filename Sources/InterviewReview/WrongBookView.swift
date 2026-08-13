@@ -81,8 +81,9 @@ struct WrongBookView: View {
 
             if isExpanded {
                 Divider()
+                // 不限制高度：让卡片自然伸展，由外层 ScrollView 统一滚动
+                // （限高会导致内容溢出绘制，覆盖在题目文字上）
                 AnswerView(markdown: entry.question.answer)
-                    .frame(maxHeight: 260)
             }
         }
         .padding(10)
