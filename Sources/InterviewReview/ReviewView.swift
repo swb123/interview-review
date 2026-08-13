@@ -16,7 +16,7 @@ struct ReviewView: View {
             }
         }
         .padding(16)
-        .frame(width: 420)
+        .frame(width: 520)
     }
 
     // MARK: - 开始页（今日队列概览）
@@ -91,12 +91,9 @@ struct ReviewView: View {
                 .foregroundStyle(.secondary)
 
             ScrollView {
-                Text(q.answer)
-                    .font(.system(size: 12))
-                    .textSelection(.enabled)
-                    .fixedSize(horizontal: false, vertical: true)
+                AnswerWebView(markdown: q.answer)
             }
-            .frame(maxHeight: 320)
+            .frame(maxHeight: 380)
 
             Button("下一题") {
                 session.advance()
