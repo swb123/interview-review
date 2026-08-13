@@ -28,14 +28,12 @@ enum AnswerParser {
         for line in markdown.components(separatedBy: "\n") {
             if line.hasPrefix("```") {
                 if inCode {
-                    // 代码块结束
                     if !codeBuffer.isEmpty {
                         blocks.append(.code(codeBuffer))
                     }
                     codeBuffer = ""
                     inCode = false
                 } else {
-                    // 代码块开始
                     flushText()
                     inCode = true
                 }
@@ -64,7 +62,7 @@ struct AnswerView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             ForEach(blocks) { block in
                 switch block {
                 case .text(let text):
@@ -77,7 +75,7 @@ struct AnswerView: View {
     }
 }
 
-// MARK: - 普通文本块（支持粗体/表格/列表的简化渲染）
+// MARK: - 普通文本块
 
 struct TextBlockView: View {
     let text: String
@@ -104,27 +102,26 @@ struct TextBlockView: View {
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
-                .lineSpacing(2)
+        } else if isSeparatorLine(trimmed) {
+            // 表格分隔行（---）→ 不显示
+            EmptyView()
         } else if trimmed.hasPrefix("- ") || trimmed.hasPrefix("+ ") {
-            // 列表项
+            // 无序列表
             HStack(alignment: .top, spacing: 6) {
                 Text("•")
                     .font(.system(size: 12))
-                RichTextLine(text: String(trimmed.dropFirst(2)))
+                MarkdownTextLine(text: String(trimmed.dropFirst(2)))
             }
         } else if let num = matchedOrderedList(trimmed) {
-            // 有序列表项
+            // 有序列表
             HStack(alignment: .top, spacing: 6) {
                 Text("\(num)")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.secondary)
-                RichTextLine(text: String(trimmed.dropFirst(num.count + 2)))
+                MarkdownTextLine(text: String(trimmed.dropFirst(num.count + 2)))
             }
-        } else if isSeparatorLine(trimmed) {
-            // 表格分隔行（---）→ 不显示
-            EmptyView()
         } else {
-            RichTextLine(text: trimmed)
+            MarkdownTextLine(text: trimmed)
         }
     }
 
@@ -140,7 +137,6 @@ struct TextBlockView: View {
     }
 
     private func matchedOrderedList(_ line: String) -> String? {
-        // 匹配 "1. " "10. " 等前缀
         var digits = ""
         for ch in line {
             if ch.isNumber {
@@ -155,70 +151,27 @@ struct TextBlockView: View {
     }
 }
 
-// MARK: - 富文本行（粗体 + 行内代码）
+// MARK: - 单行富文本（SwiftUI 原生 Markdown 解析，无重叠问题）
 
-struct RichTextLine: View {
+struct MarkdownTextLine: View {
     let text: String
 
     var body: some View {
-        Text(attributedString)
+        // 使用 SwiftUI 原生 markdown 解析（**粗体**、`行内代码`），
+        // 系统渲染路径，避免自定义 AttributedString 在弹窗中的重叠 bug
+        Text(markdownAttributed)
             .font(.system(size: 12))
             .textSelection(.enabled)
             .fixedSize(horizontal: false, vertical: true)
     }
 
-    private var attributedString: AttributedString {
-        var result = AttributedString()
-
-        // 解析 **粗体** 与 `行内代码`
-        var remaining = text
-        while !remaining.isEmpty {
-            if remaining.hasPrefix("**") {
-                if let end = remaining.range(of: "**", range: remaining.index(remaining.startIndex, offsetBy: 2)..<remaining.endIndex) {
-                    let boldText = String(remaining[remaining.index(remaining.startIndex, offsetBy: 2)..<end.lowerBound])
-                    var attr = AttributedString(boldText)
-                    attr.font = .system(size: 12, weight: .semibold)
-                    result += attr
-                    remaining = String(remaining[end.upperBound...])
-                    continue
-                }
-            }
-
-            if remaining.hasPrefix("`") {
-                if let end = remaining.range(of: "`", range: remaining.index(after: remaining.startIndex)..<remaining.endIndex) {
-                    let codeText = String(remaining[remaining.index(after: remaining.startIndex)..<end.lowerBound])
-                    var attr = AttributedString(codeText)
-                    attr.font = .system(size: 11, design: .monospaced)
-                    // 注意：不使用 backgroundColor —— AttributedString 背景在换行时会重叠
-                    result += attr
-                    remaining = String(remaining[end.upperBound...])
-                    continue
-                }
-            }
-
-            // 普通字符：找到下一个特殊标记
-            if let nextMarker = findNextMarker(in: remaining) {
-                let plainText = String(remaining[..<nextMarker])
-                result += AttributedString(plainText)
-                remaining = String(remaining[nextMarker...])
-            } else {
-                result += AttributedString(remaining)
-                remaining = ""
-            }
-        }
-
-        return result
-    }
-
-    private func findNextMarker(in text: String) -> String.Index? {
-        let boldIdx = text.range(of: "**")
-        let codeIdx = text.range(of: "`")
-        switch (boldIdx, codeIdx) {
-        case (nil, nil): return nil
-        case (let b?, nil): return b.lowerBound
-        case (nil, let c?): return c.lowerBound
-        case (let b?, let c?): return b.lowerBound < c.lowerBound ? b.lowerBound : c.lowerBound
-        }
+    private var markdownAttributed: AttributedString {
+        (try? AttributedString(
+            markdown: text,
+            options: AttributedString.MarkdownParsingOptions(
+                interpretedSyntax: .inlineOnlyPreservingWhitespace
+            )
+        )) ?? AttributedString(text)
     }
 }
 

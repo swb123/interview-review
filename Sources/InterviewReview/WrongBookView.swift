@@ -23,7 +23,7 @@ struct WrongBookView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ScrollView {
-                    LazyVStack(spacing: 8) {
+                    VStack(spacing: 8) {
                         ForEach(entries) { entry in
                             wrongCard(entry)
                         }
