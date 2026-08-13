@@ -103,7 +103,6 @@ struct TextBlockView: View {
             Text(trimmed)
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundStyle(.secondary)
-                .textSelection(.enabled)
                 .lineSpacing(2)
         } else if trimmed.hasPrefix("- ") || trimmed.hasPrefix("+ ") {
             // 列表项
@@ -163,7 +162,6 @@ struct RichTextLine: View {
     var body: some View {
         Text(attributedString)
             .font(.system(size: 12))
-            .textSelection(.enabled)
             .fixedSize(horizontal: false, vertical: true)
     }
 
