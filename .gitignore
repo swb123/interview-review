@@ -4,3 +4,5 @@
 *.xcodeproj
 InterviewReview.app/
 progress.json
+node_modules/
+.env

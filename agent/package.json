@@ -1,0 +1,23 @@
+{
+  "name": "interview-review-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "面试陪练 agent：手写 agent loop + 工具调用 + 间隔重复调度 + 结构化判分",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "test": "node --import tsx --test src/**/*.test.ts",
+    "smoke": "tsx scripts/smoke-judge.ts",
+    "merge:questions": "tsx scripts/merge-questions.ts",
+    "check:compat": "tsx scripts/check-compat.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.126.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.1",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}
