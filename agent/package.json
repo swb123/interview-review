@@ -6,10 +6,13 @@
   "description": "面试陪练 agent：手写 agent loop + 工具调用 + 间隔重复调度 + 结构化判分",
   "scripts": {
     "start": "tsx src/index.ts",
-    "test": "node --import tsx --test src/**/*.test.ts",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "smoke": "tsx scripts/smoke-judge.ts",
     "merge:questions": "tsx scripts/merge-questions.ts",
-    "check:compat": "tsx scripts/check-compat.ts"
+    "check:compat": "tsx scripts/check-compat.ts",
+    "eval": "tsx scripts/eval-judge.ts",
+    "trace:report": "tsx scripts/trace-report.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.126.0",

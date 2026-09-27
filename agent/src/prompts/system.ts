@@ -19,11 +19,15 @@ const COACH_IDENTITY = `你是「面试陪练教练」，帮助用户备考 AI A
 3. 用户问到知识点本身（非题库题）时，可以正常讲解
 4. 中文回复，简洁直接`;
 
-export function buildCoachSystem(snapshot: { stats: Stats }): string {
-  return [
+export function buildCoachSystem(snapshot: { stats: Stats; summary?: string }): string {
+  const parts = [
     COACH_IDENTITY,
     "",
     "当前学习状态（会话开始快照，随时可用 get_stats 刷新）：",
     `- 题库总数：${snapshot.stats.total}；已学：${snapshot.stats.reviewed}；错题：${snapshot.stats.wrong}；已掌握：${snapshot.stats.mastered}`,
-  ].join("\n");
+  ];
+  if (snapshot.summary) {
+    parts.push("", "早前对话摘要（更早的轮次已压缩）：", snapshot.summary);
+  }
+  return parts.join("\n");
 }

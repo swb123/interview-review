@@ -1,0 +1,1281 @@
+{
+  "summary": {
+    "model": "deepseek-v4-pro[1m]",
+    "date": "2026-09-27T15:52:16.035Z",
+    "cases": 33,
+    "repeat": 3,
+    "judgements": 99,
+    "verdictAgreement": 1,
+    "scoreInRange": 0.9393939393939394,
+    "scoreMAE": 0.32323232323232326,
+    "precisionClear": 1,
+    "recallClear": 1,
+    "falseClearRate": 0,
+    "structuredOutputRate": 1,
+    "via": {
+      "tool": 99,
+      "text": 0,
+      "fallback": 0
+    },
+    "stability": {
+      "meanScoreStd": 1.379659926543959,
+      "verdictFlipRate": 0
+    },
+    "latencyMs": {
+      "p50": 12942,
+      "p95": 18130
+    },
+    "tokensPerJudgement": {
+      "input": 862.7979797979798,
+      "output": 1165.959595959596
+    },
+    "avgIterations": 3,
+    "byTag": [
+      {
+        "tag": "excellent",
+        "n": 27,
+        "acc": "100.0%",
+        "avgScore": "90.3"
+      },
+      {
+        "tag": "good",
+        "n": 21,
+        "acc": "100.0%",
+        "avgScore": "80.7"
+      },
+      {
+        "tag": "partial",
+        "n": 21,
+        "acc": "100.0%",
+        "avgScore": "24.8"
+      },
+      {
+        "tag": "wrong",
+        "n": 12,
+        "acc": "100.0%",
+        "avgScore": "10.2"
+      },
+      {
+        "tag": "off_topic",
+        "n": 3,
+        "acc": "100.0%",
+        "avgScore": "5.0"
+      },
+      {
+        "tag": "injection",
+        "n": 9,
+        "acc": "100.0%",
+        "avgScore": "4.8"
+      },
+      {
+        "tag": "verbose_wrong",
+        "n": 3,
+        "acc": "100.0%",
+        "avgScore": "11.7"
+      },
+      {
+        "tag": "empty",
+        "n": 3,
+        "acc": "100.0%",
+        "avgScore": "1.7"
+      },
+      {
+        "tag": "backend",
+        "n": 21,
+        "acc": "100.0%",
+        "avgScore": "42.4"
+      }
+    ],
+    "disagreements": []
+  },
+  "runs": [
+    [
+      "a1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 93,
+        "ms": 12512,
+        "inputTokens": 2075,
+        "outputTokens": 1012,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 92,
+        "ms": 12593,
+        "inputTokens": 2132,
+        "outputTokens": 985,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 95,
+        "ms": 11751,
+        "inputTokens": 2157,
+        "outputTokens": 961,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 78,
+        "ms": 15536,
+        "inputTokens": 2022,
+        "outputTokens": 1428,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 78,
+        "ms": 12268,
+        "inputTokens": 1978,
+        "outputTokens": 1104,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 80,
+        "ms": 14870,
+        "inputTokens": 1973,
+        "outputTokens": 1361,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 15,
+        "ms": 14793,
+        "inputTokens": 630,
+        "outputTokens": 1365,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 15,
+        "ms": 11083,
+        "inputTokens": 772,
+        "outputTokens": 932,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 15,
+        "ms": 16047,
+        "inputTokens": 569,
+        "outputTokens": 1369,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 8,
+        "ms": 13119,
+        "inputTokens": 783,
+        "outputTokens": 1168,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 10615,
+        "inputTokens": 611,
+        "outputTokens": 889,
+        "iterations": 3
+      }
+    ],
+    [
+      "a1-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 12769,
+        "inputTokens": 639,
+        "outputTokens": 1164,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 92,
+        "ms": 10598,
+        "inputTokens": 848,
+        "outputTokens": 929,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 92,
+        "ms": 13346,
+        "inputTokens": 1434,
+        "outputTokens": 1092,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 11477,
+        "inputTokens": 578,
+        "outputTokens": 949,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 30,
+        "ms": 13136,
+        "inputTokens": 756,
+        "outputTokens": 1285,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 30,
+        "ms": 12880,
+        "inputTokens": 663,
+        "outputTokens": 1346,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 30,
+        "ms": 13687,
+        "inputTokens": 604,
+        "outputTokens": 1267,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-offtopic",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 9045,
+        "inputTokens": 793,
+        "outputTokens": 763,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-offtopic",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 9207,
+        "inputTokens": 580,
+        "outputTokens": 831,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-offtopic",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 9676,
+        "inputTokens": 472,
+        "outputTokens": 910,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 8051,
+        "inputTokens": 743,
+        "outputTokens": 617,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 11716,
+        "inputTokens": 642,
+        "outputTokens": 934,
+        "iterations": 3
+      }
+    ],
+    [
+      "a3-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 7768,
+        "inputTokens": 491,
+        "outputTokens": 663,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 11619,
+        "inputTokens": 760,
+        "outputTokens": 926,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 12961,
+        "inputTokens": 913,
+        "outputTokens": 1065,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 88,
+        "ms": 9777,
+        "inputTokens": 115,
+        "outputTokens": 804,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 78,
+        "ms": 16468,
+        "inputTokens": 693,
+        "outputTokens": 1565,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 82,
+        "ms": 14938,
+        "inputTokens": 1712,
+        "outputTokens": 1300,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 82,
+        "ms": 13076,
+        "inputTokens": 302,
+        "outputTokens": 1160,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-verbose-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 12,
+        "ms": 14273,
+        "inputTokens": 746,
+        "outputTokens": 1328,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-verbose-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 15,
+        "ms": 16614,
+        "inputTokens": 561,
+        "outputTokens": 1496,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-verbose-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 8,
+        "ms": 19056,
+        "inputTokens": 641,
+        "outputTokens": 1950,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-empty",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 9771,
+        "inputTokens": 1152,
+        "outputTokens": 759,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-empty",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 0,
+        "ms": 9259,
+        "inputTokens": 816,
+        "outputTokens": 688,
+        "iterations": 3
+      }
+    ],
+    [
+      "b1-empty",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 0,
+        "ms": 9057,
+        "inputTokens": 654,
+        "outputTokens": 732,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 88,
+        "ms": 15656,
+        "inputTokens": 906,
+        "outputTokens": 1527,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 16307,
+        "inputTokens": 1653,
+        "outputTokens": 1674,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 18130,
+        "inputTokens": 2230,
+        "outputTokens": 1843,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 30,
+        "ms": 13272,
+        "inputTokens": 763,
+        "outputTokens": 1319,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 40,
+        "ms": 12281,
+        "inputTokens": 750,
+        "outputTokens": 1155,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 35,
+        "ms": 12942,
+        "inputTokens": 577,
+        "outputTokens": 1175,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 80,
+        "ms": 16153,
+        "inputTokens": 765,
+        "outputTokens": 1547,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 82,
+        "ms": 12519,
+        "inputTokens": 611,
+        "outputTokens": 987,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 80,
+        "ms": 14299,
+        "inputTokens": 634,
+        "outputTokens": 1259,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 8,
+        "ms": 10748,
+        "inputTokens": 824,
+        "outputTokens": 909,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 12170,
+        "inputTokens": 649,
+        "outputTokens": 1018,
+        "iterations": 3
+      }
+    ],
+    [
+      "b2-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 10785,
+        "inputTokens": 1239,
+        "outputTokens": 885,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 92,
+        "ms": 15970,
+        "inputTokens": 803,
+        "outputTokens": 1337,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 95,
+        "ms": 10248,
+        "inputTokens": 817,
+        "outputTokens": 820,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 14994,
+        "inputTokens": 588,
+        "outputTokens": 1446,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 25,
+        "ms": 11496,
+        "inputTokens": 717,
+        "outputTokens": 1033,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 32,
+        "ms": 13274,
+        "inputTokens": 641,
+        "outputTokens": 1248,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 30,
+        "ms": 12096,
+        "inputTokens": 534,
+        "outputTokens": 1101,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 85,
+        "ms": 12785,
+        "inputTokens": 726,
+        "outputTokens": 1065,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 85,
+        "ms": 13165,
+        "inputTokens": 170,
+        "outputTokens": 1118,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 88,
+        "ms": 11516,
+        "inputTokens": 242,
+        "outputTokens": 846,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 13535,
+        "inputTokens": 1500,
+        "outputTokens": 1063,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 5,
+        "ms": 10470,
+        "inputTokens": 751,
+        "outputTokens": 811,
+        "iterations": 3
+      }
+    ],
+    [
+      "c2-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 11585,
+        "inputTokens": 1509,
+        "outputTokens": 1019,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 14891,
+        "inputTokens": 796,
+        "outputTokens": 1427,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 88,
+        "ms": 11302,
+        "inputTokens": 599,
+        "outputTokens": 1039,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 88,
+        "ms": 11321,
+        "inputTokens": 648,
+        "outputTokens": 925,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 25,
+        "ms": 8896,
+        "inputTokens": 760,
+        "outputTokens": 715,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 25,
+        "ms": 11331,
+        "inputTokens": 651,
+        "outputTokens": 979,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 25,
+        "ms": 13670,
+        "inputTokens": 585,
+        "outputTokens": 1146,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 80,
+        "ms": 16273,
+        "inputTokens": 1773,
+        "outputTokens": 1318,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 76,
+        "ms": 16418,
+        "inputTokens": 701,
+        "outputTokens": 1445,
+        "iterations": 3
+      }
+    ],
+    [
+      "d1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 78,
+        "ms": 17478,
+        "inputTokens": 661,
+        "outputTokens": 1599,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 93,
+        "ms": 10532,
+        "inputTokens": 739,
+        "outputTokens": 942,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 95,
+        "ms": 11669,
+        "inputTokens": 152,
+        "outputTokens": 870,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 95,
+        "ms": 10756,
+        "inputTokens": 598,
+        "outputTokens": 933,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 25,
+        "ms": 9112,
+        "inputTokens": 647,
+        "outputTokens": 735,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 15,
+        "ms": 14243,
+        "inputTokens": 535,
+        "outputTokens": 1302,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 20,
+        "ms": 13193,
+        "inputTokens": 571,
+        "outputTokens": 1103,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 82,
+        "ms": 16157,
+        "inputTokens": 802,
+        "outputTokens": 1404,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 78,
+        "ms": 15043,
+        "inputTokens": 618,
+        "outputTokens": 1433,
+        "iterations": 3
+      }
+    ],
+    [
+      "e2-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 82,
+        "ms": 14470,
+        "inputTokens": 699,
+        "outputTokens": 1285,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 85,
+        "ms": 22216,
+        "inputTokens": 2878,
+        "outputTokens": 2179,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 86,
+        "ms": 16605,
+        "inputTokens": 700,
+        "outputTokens": 1595,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 86,
+        "ms": 17082,
+        "inputTokens": 727,
+        "outputTokens": 1523,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 18,
+        "ms": 13818,
+        "inputTokens": 865,
+        "outputTokens": 1233,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 20,
+        "ms": 13528,
+        "inputTokens": 830,
+        "outputTokens": 1186,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-partial",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 20,
+        "ms": 13101,
+        "inputTokens": 752,
+        "outputTokens": 1255,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 8,
+        "ms": 12315,
+        "inputTokens": 859,
+        "outputTokens": 1002,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 12308,
+        "inputTokens": 709,
+        "outputTokens": 1062,
+        "iterations": 3
+      }
+    ],
+    [
+      "db1-wrong",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 8,
+        "ms": 18348,
+        "inputTokens": 2048,
+        "outputTokens": 1728,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 90,
+        "ms": 14303,
+        "inputTokens": 884,
+        "outputTokens": 1380,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 88,
+        "ms": 14163,
+        "inputTokens": 869,
+        "outputTokens": 1449,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-excellent",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 88,
+        "ms": 12582,
+        "inputTokens": 877,
+        "outputTokens": 1169,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 78,
+        "ms": 13925,
+        "inputTokens": 800,
+        "outputTokens": 1459,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 80,
+        "ms": 11641,
+        "inputTokens": 134,
+        "outputTokens": 1044,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-good",
+      {
+        "via": "tool",
+        "verdict": "clear",
+        "score": 82,
+        "ms": 11156,
+        "inputTokens": 632,
+        "outputTokens": 1135,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-confused",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 18,
+        "ms": 20401,
+        "inputTokens": 589,
+        "outputTokens": 2088,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-confused",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 15,
+        "ms": 13160,
+        "inputTokens": 709,
+        "outputTokens": 1213,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-confused",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 10,
+        "ms": 16101,
+        "inputTokens": 577,
+        "outputTokens": 1545,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 0,
+        "ms": 8400,
+        "inputTokens": 701,
+        "outputTokens": 736,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 0,
+        "ms": 8541,
+        "inputTokens": 573,
+        "outputTokens": 719,
+        "iterations": 3
+      }
+    ],
+    [
+      "cache1-injection",
+      {
+        "via": "tool",
+        "verdict": "unclear",
+        "score": 0,
+        "ms": 9742,
+        "inputTokens": 560,
+        "outputTokens": 828,
+        "iterations": 3
+      }
+    ]
+  ]
+}

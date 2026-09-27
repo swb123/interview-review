@@ -1,8 +1,23 @@
-# 面试复习 (V2)
+# 面试复习：AI 面试陪练 Agent + macOS 菜单栏 App
 
-macOS 菜单栏应用：基于间隔重复算法的面试题库自测工具。
+两个共享同一份题库（188 题）与学习进度的子项目：
 
-## 功能
+| 子项目 | 技术栈 | 说明 |
+|---|---|---|
+| [**agent/**](agent/README.md) | TypeScript · Anthropic SDK · DeepSeek | **面试陪练 agent**：手写 agent loop；模拟面试官自主选题、追问并出报告；AI 判分（三级结构化兜底）；标注评测集；JSONL trace |
+| 根目录（本文档） | Swift · SwiftUI | macOS 菜单栏卡片式自测 app：间隔重复、定时通知、错题本 |
+
+```bash
+cd agent && npm install && cp .env.example .env
+npm start -- --interview      # 模拟面试
+npm run eval                  # 判分评测
+```
+
+---
+
+## macOS 菜单栏 App
+
+### 功能
 
 **V1**
 - 📖 菜单栏卡片式答题：点「清楚」下一题，点「不清楚」显示标准答案
@@ -22,7 +37,7 @@ macOS 菜单栏应用：基于间隔重复算法的面试题库自测工具。
 - 统计面板：题库 / 已学 / 错题 / 掌握，点击卡片查看题目明细
 - ⚠️ 需以 .app 形式运行（见下方"打包运行"）
 
-## 开发运行
+### 开发运行
 
 ```bash
 swift run                # 开发模式（无通知，其他功能正常）
@@ -30,7 +45,7 @@ bash build_app.sh        # 打包 .app
 open InterviewReview.app # 完整模式（通知生效）
 ```
 
-## 项目结构
+### 项目结构
 
 ```
 interview-review/
@@ -54,7 +69,7 @@ interview-review/
     └── StatsView.swift              # 统计面板
 ```
 
-## 题库更新
+### 题库更新
 
 1. 更新 `articles/` 下的语雀文章（markdown，支持 HTML/markdown 表格）
 2. 运行解析脚本：
@@ -82,21 +97,9 @@ JSON 格式：
 }
 ```
 
-## Agent 版（AI 判分陪练）
-
-菜单栏 app 的兄弟项目：独立 agent CLI，手写 agent loop + 工具调用 + 结构化判分 + 间隔重复调度，覆盖 agent 岗面试场景（详情见 [agent/README.md](agent/README.md)）：
-
-```bash
-cd agent && npm install
-cp .env.example .env   # 复用 DeepSeek Anthropic 兼容端点
-npm start              # 1 今日复习 / 2 刷分类 / 3 错题本 / 4 统计 / 5 答疑
-npm start -- --category "十一、Agent 基础与架构" --count 5
-```
-
-与 app 共享同一份 `questions.json` / `progress.json`，数据格式完全兼容（注意：不要同时使用）。
-
 ## V3 规划
 
 - [ ] 接入语雀 API 自动拉取最新文章（需个人令牌）
 - [ ] 点击通知直接打开复习窗口
 - [x] Agent 版：AI 判分陪练 CLI（`agent/`，含 agent 专题题库十一~十六）
+- [x] Agent 版：模拟面试官模式、判分评测集、trace 可观测性

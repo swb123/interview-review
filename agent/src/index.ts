@@ -9,7 +9,9 @@ import { buildCoachSystem } from "./prompts/system.js";
 import { applyResult, buildTodayQueue, buildWrongBook, computeStats } from "./scheduler/scheduler.js";
 import { judge } from "./judge/judge.js";
 import type { Judgement } from "./judge/schema.js";
-import { runAgentLoop } from "./llm/loop.js";
+import { runAgentLoop, textOf } from "./llm/loop.js";
+import { runInterview } from "./interview/interviewer.js";
+import { writeTrace } from "./observability/trace.js";
 import { createToolRegistry } from "./tools/registry.js";
 
 // ANSI 常量（不引 chalk：四个常量足够）
@@ -43,22 +45,25 @@ interface CliArgs {
   count?: number;
   dryRun: boolean;
   agentic: boolean;
+  interview: boolean;
 }
 
 function parseArgs(argv: string[]): CliArgs {
-  const args: CliArgs = { dryRun: false, agentic: false };
+  const args: CliArgs = { dryRun: false, agentic: false, interview: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--dry-run") args.dryRun = true;
     else if (a === "--agentic") args.agentic = true;
+    else if (a === "--interview") args.interview = true;
     else if (a === "--category") args.category = argv[++i];
     else if (a === "--count") args.count = Number.parseInt(argv[++i] ?? "", 10);
     else if (a === "--help" || a === "-h") {
-      console.log(`用法: npm start [--category 分类名] [--count N] [--dry-run] [--agentic]
+      console.log(`用法: npm start [--category 分类名] [--count N] [--dry-run] [--agentic] [--interview]
   --category  直接刷指定分类（如 "十一、Agent 基础与架构"），跳过主菜单
   --count     限制本次题数
   --dry-run   判分照常但不写 progress.json（冒烟/试玩用）
-  --agentic   直接进入答疑模式（自由对话，展示完整 agent loop + 工具调用）`);
+  --agentic   直接进入答疑模式（自由对话，展示完整 agent loop + 工具调用）
+  --interview 直接进入模拟面试（面试官 agent 自主选题/追问/收尾，--count 控制主问题数）`);
       process.exit(0);
     }
   }
@@ -178,6 +183,7 @@ async function runQuiz(bank: QuestionBank, questions: Question[], dryRun: boolea
         }
       },
     );
+    writeTrace({ mode: "judge", questionId: q.id, via: result.via }, result.stats);
 
     if (result.via === "fallback") {
       console.log(C.red + "判分通道不可用，直接显示标准答案：" + C.reset);
@@ -268,40 +274,92 @@ function showStats(bank: QuestionBank): void {
 async function chatMode(bank: QuestionBank): Promise<void> {
   const ctx = new ConversationContext();
   const registry = createToolRegistry({ bank, revealAnswer: false });
-  const progress = loadProgress();
-  const system = buildCoachSystem({
-    stats: computeStats(progress, bank.questions.length),
-  });
+  const stats = computeStats(loadProgress(), bank.questions.length);
   console.log(C.cyan + "答疑模式：自由对话，可问知识点、可让教练出题。输入 exit 返回主菜单。" + C.reset);
   while (true) {
     const line = (await question(C.green + "你> " + C.reset)).trim();
     if (line === "exit") break;
     if (line === "") continue;
-    ctx.append("user", line);
     if (ctx.needsCompression()) {
       console.log(C.dim + "压缩历史上下文…" + C.reset);
       await ctx.compress();
     }
+    ctx.beginExchange(line);
+    // loop 会原地追加 assistant/tool_result；记录起点，结束后把整段轨迹并回上下文
+    const messages = ctx.toMessages();
+    const from = messages.length;
     const result = await runAgentLoop({
-      system,
+      system: buildCoachSystem({ stats, summary: ctx.summaryText }),
       tools: registry.schemas,
-      messages: ctx.toMessages(),
+      messages,
       executeTool: registry.execute,
       maxIterations: 8,
       onToolUse: (name, _input, ok, ms) => {
         console.log(C.dim + `  ⚙ ${name}${ok ? "" : " ✗"} (${ms}ms)` + C.reset);
       },
     });
-    const text = result.message.content
-      .filter((b) => b.type === "text")
-      .map((b) => b.text)
-      .join("\n");
+    writeTrace({ mode: "chat", kind: result.kind }, result.stats);
+    // 最后一轮请求的输入量 ≈ 当前上下文体积（累计值会把多轮重复计入）
+    ctx.recordUsage(result.stats.lastInputTokens);
+    const text = textOf(result.message);
+    const trail = messages.slice(from);
+    // 护栏触发或无文本时补占位，保证 exchange 以 assistant 结尾、user/assistant 交替
+    trail.push({ role: "assistant", content: text || "（本轮未产出回复）" });
+    ctx.completeExchange(trail);
     console.log(C.magenta + "教练> " + C.reset + (text || C.dim + "（无文本输出）" + C.reset));
-    if (text) ctx.append("assistant", text);
     if (result.kind === "max_iterations") {
       console.log(C.dim + "[护栏] 达到最大轮次。" + C.reset);
     }
   }
+}
+
+// ---------------------------------------------------------------------------
+// 模拟面试（面试官 agent 掌握控制流）
+// ---------------------------------------------------------------------------
+
+async function interviewMode(bank: QuestionBank, args: CliArgs): Promise<void> {
+  console.log(
+    C.cyan + "模拟面试：面试官会自主选题、追问、判分。多行作答，空行结束；输入 exit 提前结束。" + C.reset,
+  );
+  const outcome = await runInterview({
+    bank,
+    dryRun: args.dryRun,
+    maxQuestions: args.count ?? 3,
+    ask: async (text, meta) => {
+      const tag = meta.kind === "main" ? `【主问题 · ${meta.questionId}】` : "【追问】";
+      console.log(`\n${C.bold}${tag}${C.reset}\n${C.yellow}${text}${C.reset}`);
+      return readMultiline();
+    },
+    onEvent: (e) => {
+      if (e.type === "tool" && e.name !== "ask_candidate") {
+        console.log(C.dim + `  ⚙ ${e.name}${e.ok ? "" : " ✗"} (${e.ms}ms)` + C.reset);
+      } else if (e.type === "judged") {
+        const j = e.judgement;
+        console.log(C.dim + `  判分：${j.verdict} ${j.score}/100；遗漏：${j.missed_points.join("；") || "无"}` + C.reset);
+      }
+    },
+  });
+
+  if (outcome.closing) console.log("\n" + C.magenta + "面试官> " + C.reset + outcome.closing);
+  const r = outcome.report;
+  if (r) {
+    console.log(`\n${C.bold}面试报告${C.reset}  整体 ${C.bold}${r.overall_score}/100${C.reset}`);
+    for (const p of r.per_question) {
+      const badge = p.verdict === "clear" ? C.green + "✓" + C.reset : C.red + "✗" + C.reset;
+      console.log(`  ${badge} ${p.questionId}：${p.note}`);
+    }
+    if (r.strengths.length) console.log(C.green + "亮点：" + C.reset + r.strengths.join("；"));
+    if (r.weaknesses.length) console.log(C.red + "薄弱：" + C.reset + r.weaknesses.join("；"));
+    if (r.next_steps.length) console.log(C.cyan + "建议：" + C.reset + r.next_steps.join("；"));
+  } else {
+    console.log(C.yellow + "面试官未提交结构化报告（可能触发了轮次护栏）。" + C.reset);
+  }
+  const s = outcome.loop.stats;
+  console.log(
+    C.dim +
+      `本场：${s.iterations} 轮 · ${(s.totalElapsedMs / 1000).toFixed(1)}s · in ${s.totalInputTokens} / out ${s.totalOutputTokens} tokens · 已记录 ${outcome.recorded.length} 题${args.dryRun ? "（dry-run 未落盘）" : ""}` +
+      C.reset,
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -320,6 +378,11 @@ async function main(): Promise<void> {
     );
   }
 
+  if (args.interview) {
+    await interviewMode(bank, args);
+    rl.close();
+    return;
+  }
   if (args.agentic) {
     await chatMode(bank);
     rl.close();
@@ -341,6 +404,7 @@ async function main(): Promise<void> {
         "  3. 错题本",
         "  4. 统计",
         "  5. 答疑（自由对话）",
+        "  6. 模拟面试（面试官 agent 自主追问）",
         "  0. 退出",
       ].join("\n"),
     );
@@ -360,6 +424,9 @@ async function main(): Promise<void> {
         break;
       case "5":
         await chatMode(bank);
+        break;
+      case "6":
+        await interviewMode(bank, args);
         break;
       case "0":
         console.log("再见！");

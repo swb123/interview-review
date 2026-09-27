@@ -1,11 +1,18 @@
+import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { parseEnv } from "node:util";
 
-// 加载 agent/.env（不存在则忽略，环境变量可由 shell 提供）
-try {
-  process.loadEnvFile?.(join(process.cwd(), ".env"));
-} catch {
-  // 无 .env 时走环境变量
+// 加载 agent/.env：项目级配置优先于 shell 环境变量。
+// 不用 process.loadEnvFile——它不覆盖已有变量，而在 Claude Code 等工具的终端里
+// ANTHROPIC_BASE_URL 往往已被设成别的网关，会把请求（连同本项目的 token）发错地方。
+// 按文件位置定位 .env，不依赖 cwd。
+const ENV_FILE = join(dirname(fileURLToPath(import.meta.url)), "..", ".env");
+if (existsSync(ENV_FILE)) {
+  for (const [k, v] of Object.entries(parseEnv(readFileSync(ENV_FILE, "utf8")))) {
+    if (v !== undefined) process.env[k] = v;
+  }
 }
 
 export interface AppConfig {
